@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+    db:
+        image: mysql:8
+        container_name: db
+        volumes: 
+            - ./db/mysql/data:/var/lib/mysql
+            - ./db/mysql/conf.d:/etc/mysql/conf.d
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_DATABASE: docker
+            MYSQL_USER: docker-user
+            MYSQL_PASSWORD: docker-pass
+            TZ: 'Asia/Tokyo'
+        command: --default-authentication-plugin=mysql_native_password
+        ports:
+            - ${MYSQL_PORT}:3306
+    django3.2:
+        build:
+            context: ./django/3.2/
+            args:
+                - DJANGO_3_2_GIT:${DJANGO_3_2_GIT}
+        container_name: django3.2
+        tty: true
+        volumes: 
+            - ./django/3.2/work:/work
+        ports: 
+            - ${DJANGO_3_2_PORT}:8000
+        depends_on: 
+            - db
