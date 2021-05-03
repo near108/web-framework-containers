@@ -11,4 +11,4 @@ COPY ./requirements.txt /work/
 RUN pip install -r requirements.txt
 
 ARG DJANGO_3_2_GIT
-RUN git clone ${DJANGO_3_2_GIT}
+RUN eval ${DJANGO_3_2_GIT_COMMAND}

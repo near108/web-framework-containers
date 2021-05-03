@@ -20,7 +20,7 @@ services:
         build:
             context: ./django/3.2/
             args:
-                - DJANGO_3_2_GIT:${DJANGO_3_2_GIT}
+                - DJANGO_3_2_GIT_COMMAND=${DJANGO_3_2_GIT_COMMAND}
         container_name: django3.2
         tty: true
         volumes: 
