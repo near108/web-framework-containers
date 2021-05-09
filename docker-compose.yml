@@ -1,11 +1,11 @@
 version: "3.9"
 services:
     mysql:
-        image: mysql:${MYSQL_VERSION}
-        container_name: mysql
+        image: ${MYSQL_CONTAINER_NAME}:${MYSQL_VERSION}
+        container_name: ${MYSQL_CONTAINER_NAME}
         volumes: 
-            - ./db/mysql/data:/var/lib/mysql
-            - ./db/mysql/conf.d:/etc/mysql/conf.d
+            - ./db/${MYSQL_CONTAINER_NAME}/data:/var/lib/mysql
+            - ./db/${MYSQL_CONTAINER_NAME}/conf.d:/etc/mysql/conf.d
         restart: always
         environment:
             MYSQL_ROOT_PASSWORD: password
@@ -50,21 +50,21 @@ services:
             - ${MYSQL_CONTAINER_NAME}
     django:
         build:
-            context: ./django/
+            context: ./${DJANGO_CONTAINER_NAME}/
             args:
                 - DJANGO_VERSION=${DJANGO_VERSION}
                 - PYTHON_IMAGE_VERSION=${PYTHON_IMAGE_VERSION}
                 - DJANGO_GIT_BRANCH=${DJANGO_APP_GIT_BRANCH}
                 - DJANGO_GIT_REPOS=${DJANGO_APP_GIT_REPOS}
-        container_name: django
+        container_name: ${DJANGO_CONTAINER_NAME}
         # command: uwsgi --socket :${DJANGO_PORT} --module project.wsgi
         entrypoint: "/work/entrypoint.sh"
         tty: true
         volumes: 
-            - ./django/work:/work
+            - ./${DJANGO_CONTAINER_NAME}/work:/work
         ports: 
             - ${DJANGO_PORT}:8000
         expose: 
             - ${DJANGO_PORT}
         depends_on: 
-            - mysql
+            - ${MYSQL_CONTAINER_NAME}
