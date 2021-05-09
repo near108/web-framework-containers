@@ -28,7 +28,26 @@ services:
     #         - ./static:/static
     #     depends_on: 
     #         - django
-
+    
+    laravel:
+        build:
+            context: ./${LARAVEL_CONTAINER_NAME}/
+            args:
+                - LARAVEL_VERSION=${LARAVEL_VERSION}
+                - PHP_IMAGE_VERSION=${PHP_IMAGE_VERSION}
+                - COMPOSER_VERSION=${COMPOSER_VERSION}
+                - LARAVEL_APP_GIT_BRANCH=${LARAVEL_APP_GIT_BRANCH}
+                - LARAVEL_APP_GIT_REPOS=${LARAVEL_APP_GIT_REPOS}
+        container_name: ${LARAVEL_CONTAINER_NAME}
+        # command: 
+        # entrypoint: 
+        tty: true
+        volumes: 
+            - ./${LARAVEL_CONTAINER_NAME}/work:/work
+        ports: 
+            - ${LARAVEL_PORT}:8000
+        depends_on: 
+            - ${MYSQL_CONTAINER_NAME}
     django:
         build:
             context: ./django/
