@@ -1,8 +1,8 @@
 version: "3.9"
 services:
-    db:
-        image: mysql:8
-        container_name: db
+    mysql:
+        image: mysql:${MYSQL_VERSION}
+        container_name: mysql
         volumes: 
             - ./db/mysql/data:/var/lib/mysql
             - ./db/mysql/conf.d:/etc/mysql/conf.d
@@ -16,16 +16,36 @@ services:
         command: --default-authentication-plugin=mysql_native_password
         ports:
             - ${MYSQL_PORT}:3306
-    django3.2:
+
+    # nginx:
+    #     image: nginx:${NGINX_VERSION}
+    #     container_name: nginx
+    #     ports:
+    #         - ${NGINX_PORT}:8000
+    #     volumes: 
+    #         - ./web/nginx/conf:/etc/nginx/conf.d
+    #         - ./web/nginx/uwsgi_params:/etc/nginx/uwsgi_params
+    #         - ./static:/static
+    #     depends_on: 
+    #         - django
+
+    django:
         build:
-            context: ./django/3.2/
+            context: ./django/
             args:
-                - DJANGO_3_2_GIT_COMMAND=${DJANGO_3_2_GIT_COMMAND}
-        container_name: django3.2
+                - DJANGO_VERSION=${DJANGO_VERSION}
+                - PYTHON_IMAGE_VERSION=${PYTHON_IMAGE_VERSION}
+                - DJANGO_GIT_BRANCH=${DJANGO_APP_GIT_BRANCH}
+                - DJANGO_GIT_REPOS=${DJANGO_APP_GIT_REPOS}
+        container_name: django
+        # command: uwsgi --socket :${DJANGO_PORT} --module project.wsgi
+        entrypoint: "/work/entrypoint.sh"
         tty: true
         volumes: 
-            - ./django/3.2/work:/work
+            - ./django/work:/work
         ports: 
-            - ${DJANGO_3_2_PORT}:8000
+            - ${DJANGO_PORT}:8000
+        expose: 
+            - ${DJANGO_PORT}
         depends_on: 
-            - db
+            - mysql
