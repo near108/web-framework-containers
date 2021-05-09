@@ -3,9 +3,9 @@
 
 ## 対象フレームワーク一覧
 
-| 言語 | FW | Ver. | コンテナ名 | ポート番号 | 作成日 | 更新日 |
+| 言語 | FW | コンテナ名 | ポート番号 | 作成日 | 更新日 |
 | --- | --- | --- | --- | --- | --- | --- |
-| Python | Django | 3.2 | django3.2 | 8081 | 2021/5/2 | 2021/5/3 |
+| Python | Django | django | 8001 | 2021/5/2 | 2021/5/3 |
 
 ## 使い方
 
@@ -28,53 +28,56 @@ git clone https://github.com/jusplat/web-frameworks.git
 cd web-frameworks
 ```
 
-#### 2. 起動したいフレームワークのコンテナを起動する
+#### 2. 設定ファイルを編集する
 
-docker-compose up -d {コンテナ名}
+#### 3. コンテナを起動する
 
-例) Djangoのバージョン3.2
+下記スクリプトを実行する
 
-```
-docker-compose up -d django3.2
-```
-
-#### 3. 起動したコンテナに接続する
-
-docker exec -it {コンテナ名} bash
-
-例）Djangoのバージョン3.2
+Windowsの場合
 
 ```
-docker exec -it django3.2 bash
+dockerstart.exe
 ```
 
-#### 4. フレームワークのプロジェクトルートへ移動する
+linuxの場合
 
 ```
-cd container
+dockerstart.sh
 ```
 
-#### 5. サーバ起動スクリプトを実行する
+#### ※起動したコンテナに接続する
+
+docker-compose exec {コンテナ名} bash
+
+例）Django
 
 ```
-sh runserver.sh
+docker-compose exec django bash
 ```
 
-#### 6. ブラウザからアクセスする
+#### 5. ブラウザからアクセスする
 `http://127.0.0.1:{ポート番号}`
 
-例）Djangoのバージョン3.2
+例）Django
 
-[http://127.0.0.1:8081]()
+[http://127.0.0.1:8001]()
 
 ### プロジェクトを停止する
 
-#### 1. コンテナの接続を終了する
+#### 1. コンテナを停止する
+
+下記スクリプトを実行する
+
+Windowsの場合
+
 ```
-exit
+dockerstop.exe
 ```
 
-#### 2. コンテナを停止する
+linuxの場合
+
 ```
-docker-compose down
+dockerstop.sh
 ```
+

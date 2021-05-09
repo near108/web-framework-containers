@@ -1,0 +1,47 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "go build dockeStart for windows",
+            "type": "shell",
+            "command": "set GOOS=windows; cd ./tools; go build -o ../dockerstart.exe ./cmd/dockerstart/dockerstart.go",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "go build dockerStart for linux",
+            "type": "shell",
+            "command": "set GOOS=linux; cd ./tools; go build -o ../dockerstart.sh ./cmd/dockerstart/dockerstart.go",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "go build dockerStop for windows",
+            "type": "shell",
+            "command": "set GOOS=windows; cd ./tools; go build -o ../dockerstop.exe ./cmd/dockerstop/dockerstop.go",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "go build dockerStop for linux",
+            "type": "shell",
+            "command": "set GOOS=linux; cd ./tools; go build -o ../dockerstop.sh ./cmd/dockerstop/dockerstop.go",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+    ]
+}
