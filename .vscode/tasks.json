@@ -16,7 +16,7 @@
         {
             "label": "go build dockerStart for linux",
             "type": "shell",
-            "command": "set GOOS=linux; cd ./tools; go build -o ../dockerstart.sh ./cmd/dockerstart/dockerstart.go",
+            "command": "set GOOS=linux; cd ./tools; go build -o ../dockerstart ./cmd/dockerstart/dockerstart.go",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -36,7 +36,7 @@
         {
             "label": "go build dockerStop for linux",
             "type": "shell",
-            "command": "set GOOS=linux; cd ./tools; go build -o ../dockerstop.sh ./cmd/dockerstop/dockerstop.go",
+            "command": "set GOOS=linux; cd ./tools; go build -o ../dockerstop ./cmd/dockerstop/dockerstop.go",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
