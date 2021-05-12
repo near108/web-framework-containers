@@ -99,11 +99,5 @@ func (dc *DockerCompose) dockerCompose(command string, commandArgs []string) err
 	log.Printf("exec command: %s\n", cmd.String())
 	// cmd.Stdout = os.Stdin
 	cmd.Stderr = os.Stderr
-	if err := cmd.Start(); err != nil {
-		return err
-	}
-	if err := cmd.Wait(); err != nil {
-		return err
-	}
-	return nil
+	return cmd.Run()
 }

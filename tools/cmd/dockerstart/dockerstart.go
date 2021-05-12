@@ -32,6 +32,7 @@ func main() {
 			containerNames = append(containerNames, container.Name)
 		}
 	}
+	log.Printf("target containers: %v", containerNames)
 
 	// Dockerコンテナ起動
 	dcCient := &dockercompose.DockerCompose{
