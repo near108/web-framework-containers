@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
-	"path"
 	"strconv"
 
 	"github.com/jusplat/web-fw-test-container/configs"
@@ -34,11 +34,18 @@ func main() {
 	}
 	log.Printf("target containers: %v", containerNames)
 
+	// ワークスペース作成
+	for _, container := range config.Container {
+		if _, err := os.Stat(container.Workspace); os.IsNotExist(err) {
+			os.Mkdir(container.Workspace, 0775)
+		}
+	}
+
 	// Dockerコンテナ起動
-	dcCient := &dockercompose.DockerCompose{
+	dc := &dockercompose.DockerCompose{
 		Files: []string{config.ComposeFile},
 	}
-	if err := dcCient.Up([]string{"-d"}, containerNames); err != nil {
+	if err := dc.Up([]string{"-d"}, containerNames); err != nil {
 		handleError(err)
 	}
 
@@ -47,11 +54,8 @@ func main() {
 	for _, container := range config.Container {
 		enable, _ := strconv.ParseBool(container.Enable)
 		if enable && container.Repos != "" {
-			if container.Workspace != "" {
-				workspace = container.Workspace
-			}
-			if err := git.Clone(path.Join(container.Name, workspace), container.Branch, container.Repos); err != nil {
-				handleError(err)
+			if err := git.Clone(container.Workspace, container.Branch, container.Repos); err != nil {
+				fmt.Printf("Worning: git clone skipped %s\n", container.Name)
 			}
 		}
 	}

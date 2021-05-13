@@ -3,6 +3,7 @@ package configs
 import (
 	"log"
 	"os"
+	"path"
 	"sync"
 
 	"github.com/BurntSushi/toml"
@@ -10,9 +11,10 @@ import (
 )
 
 type Config struct {
-	Envfile     string       `toml:"env"`
-	ComposeFile string       `toml:"composefile"`
-	Container   []*Container `toml:"Container"`
+	Envfile        string       `toml:"env"`
+	ClearWorkspace bool         `toml:"clearWorkspace"`
+	ComposeFile    string       `toml:"composefile"`
+	Container      []*Container `toml:"Container"`
 }
 
 var config *Config
@@ -50,6 +52,10 @@ func setEnv(c *Container) {
 	}
 	if enable := os.Getenv(c.Enable); enable != "" {
 		c.Enable = enable
+	}
+	if workspace := os.Getenv(c.Workspace); workspace != "" {
+		c.Workspace = path.Join(c.Name, workspace)
+		log.Println(c.Workspace)
 	}
 }
 

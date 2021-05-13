@@ -28,7 +28,25 @@ services:
     #         - ./static:/static
     #     depends_on: 
     #         - django
-    
+
+    rails:
+        build: 
+            context: ./${RAILS_CONTAINER_NAME}/
+            args: 
+                - RUBY_IMAGE_VERSION=${RUBY_IMAGE_VERSION}
+                - RAILS_APP_GIT_BRANCH=${RAILS_APP_GIT_BRANCH}
+                - RAILS_APP_GIT_REPOS=${RAILS_APP_GIT_REPOS}
+        container_name: ${RAILS_CONTAINER_NAME}
+        # command:
+        # entrypoint: 
+        tty: true
+        volumes: 
+            - ./${RAILS_CONTAINER_NAME}/${RAILS_WORKSPACE}:/${RAILS_WORKSPACE}
+        ports: 
+            - ${RAILS_PORT}:3000
+        depends_on: 
+            - ${MYSQL_CONTAINER_NAME}
+
     laravel:
         build:
             context: ./${LARAVEL_CONTAINER_NAME}/
@@ -43,11 +61,12 @@ services:
         # entrypoint: 
         tty: true
         volumes: 
-            - ./${LARAVEL_CONTAINER_NAME}/work:/work
+            - ./${LARAVEL_CONTAINER_NAME}/${LARAVEL_WORKSPACE}:/${LARAVEL_WORKSPACE}
         ports: 
             - ${LARAVEL_PORT}:8000
         depends_on: 
             - ${MYSQL_CONTAINER_NAME}
+
     django:
         build:
             context: ./${DJANGO_CONTAINER_NAME}/
@@ -58,10 +77,10 @@ services:
                 - DJANGO_GIT_REPOS=${DJANGO_APP_GIT_REPOS}
         container_name: ${DJANGO_CONTAINER_NAME}
         # command: uwsgi --socket :${DJANGO_PORT} --module project.wsgi
-        entrypoint: "/work/entrypoint.sh"
+        # entrypoint: "/work/entrypoint.sh"
         tty: true
         volumes: 
-            - ./${DJANGO_CONTAINER_NAME}/work:/work
+            - ./${DJANGO_CONTAINER_NAME}/${DJANGO_WORKSPACE}:/${DJANGO_WORKSPACE}
         ports: 
             - ${DJANGO_PORT}:8000
         expose: 

@@ -10,6 +10,7 @@ import (
 
 var (
 	ENV_FILE = ".env"
+	config   *configs.Config
 )
 
 func main() {
@@ -18,14 +19,25 @@ func main() {
 	}
 
 	// 環境変数の読み込み
-	config := configs.GetConfig(os.Getenv(ENV_FILE))
+	config = configs.GetConfig(os.Getenv(ENV_FILE))
 
 	// Dockerコンテナ停止
-	dcClient := &dockercompose.DockerCompose{
+	dc := &dockercompose.DockerCompose{
 		Files: []string{config.ComposeFile},
 	}
-	dcClient.Down()
+	dc.Down()
 
+	// Workディレクトリ内の削除
+	if config.ClearWorkspace {
+		for _, container := range config.Container {
+			if container.Workspace != "" {
+				log.Printf("remove workspace at %s\n", container.Workspace)
+				if err := os.RemoveAll(container.Workspace); err != nil {
+					log.Println(err)
+				}
+			}
+		}
+	}
 }
 
 // 共通エラー処理
