@@ -38,7 +38,7 @@ services:
                 - RAILS_APP_GIT_REPOS=${RAILS_APP_GIT_REPOS}
         container_name: ${RAILS_CONTAINER_NAME}
         # command:
-        # entrypoint: 
+        # entrypoint: "/${RAILS_WORKSPACE}/entrypoint.sh"
         tty: true
         volumes: 
             - ./${RAILS_CONTAINER_NAME}/${RAILS_WORKSPACE}:/${RAILS_WORKSPACE}

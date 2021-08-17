@@ -57,6 +57,9 @@ func setEnv(c *Container) {
 		c.Workspace = path.Join(c.Name, workspace)
 		log.Println(c.Workspace)
 	}
+	if entrypoint := os.Getenv(c.Entrypoint); entrypoint != "" {
+		c.Entrypoint = entrypoint
+	}
 }
 
 // .envの値を読み込む
